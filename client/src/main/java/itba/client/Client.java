@@ -18,6 +18,9 @@ public class Client {
     public static void main(String[] args) {
         logger.info("mapReduce Client Starting ...");
 
+        ArgumentParser parser = new ArgumentParser();
+        ClientArguments arguments = parser.parse(args);
+
         ClientConfig config = new ClientConfig();
         GroupConfig groupConfig = config.getGroupConfig();
         groupConfig.setName("dev");
