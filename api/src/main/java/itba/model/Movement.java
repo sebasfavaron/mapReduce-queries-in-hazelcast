@@ -8,7 +8,9 @@ public class Movement implements Serializable {
     private final Integer time;
     private final String flightType, classification, moveType, OACIOrigin, OACIDestiny, airline, plane;
 
-    public Movement(Date date, Integer time, String flightType, String classification, String moveType, String OACIOrigin, String OACIDestiny, String airline, String plane) {
+    public Movement(final Date date, final Integer time, final String flightType, final String classification,
+                    final String moveType, final String OACIOrigin, final String OACIDestiny, final String airline,
+                    final String plane) {
         this.date = date;
         this.time = time;
         this.flightType = flightType;

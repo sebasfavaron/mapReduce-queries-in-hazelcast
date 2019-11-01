@@ -17,7 +17,7 @@ public class ClientArguments {
         this.min = null;
     }
 
-    public void setHost(String host) {
+    public void setHost(final String host) {
         if (!host.matches("([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3})|localhost")) {
             System.out.println("Host is not valid");
             System.exit(-1);
@@ -29,7 +29,7 @@ public class ClientArguments {
         return host;
     }
 
-    private Integer stringToInt(String str, String errorMsg) {
+    private Integer stringToInt(final String str, final String errorMsg) {
         if (str == null) {
             System.out.println(errorMsg);
             System.exit(-1);
@@ -43,7 +43,7 @@ public class ClientArguments {
         return null;
     }
 
-    public void setPort(String port) {
+    public void setPort(final String port) {
         this.port = stringToInt(port, "Port is not valid");
     }
 
@@ -55,7 +55,7 @@ public class ClientArguments {
         return inPath;
     }
 
-    public void setInPath(String inPath) {
+    public void setInPath(final String inPath) {
         this.inPath = inPath;
     }
 
@@ -63,7 +63,7 @@ public class ClientArguments {
         return outPath;
     }
 
-    public void setOutPath(String outPath) {
+    public void setOutPath(final String outPath) {
         this.outPath = outPath;
     }
 
@@ -71,7 +71,7 @@ public class ClientArguments {
         return OACI;
     }
 
-    public void setOACI(String OACI) {
+    public void setOACI(final String OACI) {
         this.OACI = OACI;
     }
 
@@ -79,7 +79,7 @@ public class ClientArguments {
         return n;
     }
 
-    public void setN(String n) {
+    public void setN(final String n) {
         this.n = stringToInt(n, "Not a valid number");
     }
 
@@ -87,7 +87,7 @@ public class ClientArguments {
         return min;
     }
 
-    public void setMin(String min) {
+    public void setMin(final String min) {
         this.min = stringToInt(min, "Not a valid minimum number");
     }
 }

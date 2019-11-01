@@ -1,7 +1,7 @@
 package itba.client;
 
 public class ArgumentParser {
-    public ClientArguments parse(String[] args) {
+    public ClientArguments parse(final String[] args) {
         String Daddresses = "-Daddresses=", DinPath = "-DinPath=", DoutPath = "-DoutPath=", Doaci = "-Doaci=", Dn = "-Dn=", Dmin = "-Dmin=";
         ClientArguments clientArguments = new ClientArguments();
         for (String arg : args) {
@@ -29,7 +29,7 @@ public class ArgumentParser {
         return clientArguments;
     }
 
-    private String getArgumentValue(String arg, String key) {
+    private String getArgumentValue(final String arg, final String key) {
         return arg.substring(key.length());
     }
 }
