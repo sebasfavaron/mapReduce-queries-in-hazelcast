@@ -6,7 +6,13 @@ import java.util.Date;
 public class Movement implements Serializable {
     private final Date date;
     private final Integer time;
-    private final String flightType, classification, moveType, OACIOrigin, OACIDestiny, airline, plane;
+    private final String flightType;
+    private final String classification;
+    private final String moveType;
+    private final String OACIOrigin;
+    private final String OACIDestiny;
+    private final String airline;
+    private final String plane;
 
     public Movement(final Date date, final Integer time, final String flightType, final String classification,
                     final String moveType, final String OACIOrigin, final String OACIDestiny, final String airline,

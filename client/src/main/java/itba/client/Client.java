@@ -7,6 +7,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IList;
 import itba.client.query.Query;
 import itba.client.query.Query1;
+import itba.client.query.Query2;
 import itba.model.Airport;
 import itba.model.Movement;
 import org.slf4j.Logger;
@@ -41,7 +42,7 @@ public class Client {
         csvLoader.loadMovements(movements, arguments.getInPath()+"movimientos.csv");
         
         // todo: switch entre todas las queries
-        Query query = new Query1(airports, movements);
+        Query query = new Query2(airports, movements, 5);
         query.run();
 
         movements.destroy();
