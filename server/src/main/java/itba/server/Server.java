@@ -1,5 +1,8 @@
 package itba.server;
 
+import com.hazelcast.config.Config;
+import com.hazelcast.config.JoinConfig;
+import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import org.slf4j.Logger;
@@ -13,7 +16,15 @@ public class Server {
 
         // Los archivos se tienen que procesar cada vez que se usa una query,
         // por eso no hay que inicializar nada más acá
-        HazelcastInstance hzInstance = Hazelcast.newHazelcastInstance();
+        Config config = new Config();
+        NetworkConfig network = config.getNetworkConfig();
+        network.setPort(5701);
+        network.setPortAutoIncrement(false);
+        JoinConfig join = network.getJoin();
+        join.getMulticastConfig().setEnabled(false);
+        join.getTcpIpConfig().addMember("localhost").setEnabled(true);
+
+        HazelcastInstance hzInstance = Hazelcast.newHazelcastInstance(config);
 
 //        //Map example in hz
 //        Map<Long, String> map = hzInstance.getMap("mapExample");

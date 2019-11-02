@@ -1,5 +1,7 @@
 package itba.client;
 
+import java.util.Arrays;
+
 public class ArgumentParser {
     public ClientArguments parse(final String[] args) {
         String Daddresses = "-Daddresses=", DinPath = "-DinPath=", DoutPath = "-DoutPath=", Doaci = "-Doaci=", Dn = "-Dn=", Dmin = "-Dmin=";
@@ -7,9 +9,12 @@ public class ArgumentParser {
         for (String arg : args) {
             if (arg.startsWith(Daddresses)) {
                 String val = getArgumentValue(arg, Daddresses);
-                String[] address = val.split(":");
-                clientArguments.setHost(address[0]);
-                clientArguments.setPort(address[1]);
+                String[] addresses = val.split(";");
+
+                Arrays.stream(addresses).forEach(address -> {
+                    String[] aux = val.split(":");
+                    clientArguments.addAddress(aux[0], aux[1]);
+                });
             } else if (arg.startsWith(DinPath)) {
                 clientArguments.setInPath(getArgumentValue(arg, DinPath));
             } else if (arg.startsWith(DoutPath)) {

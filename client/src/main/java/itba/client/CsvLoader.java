@@ -14,7 +14,7 @@ import java.util.Date;
 
 public class CsvLoader {
 
-    public void loadMovement(final IList<Movement> movements, final String filePath) {
+    public void loadMovements(final IList<Movement> movements, final String filePath) {
         File csvFile = new File(filePath);
         System.out.println(csvFile.getAbsolutePath());
 
@@ -50,7 +50,7 @@ public class CsvLoader {
         }
     }
 
-    public void loadAirport(final IList<Airport> airports, final String filePath) {
+    public void loadAirports(final IList<Airport> airports, final String filePath) {
         File csvFile = new File(filePath);
         System.out.println(csvFile.getAbsolutePath());
 
