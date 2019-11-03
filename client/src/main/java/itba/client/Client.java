@@ -12,6 +12,8 @@ import itba.model.Movement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ExecutionException;
 
 public class Client {
@@ -19,9 +21,12 @@ public class Client {
 
     private static String AIRPORTS_CSV = "aeropuertos.csv";
     private static String MOVEMENTS_CSV = "movimientos.csv";
+    private static String TIMESTAMP_FILENAME = "timestamp.txt";
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         LOGGER.info("mapReduce Client Starting ...");
+
+        Writer timestamp = new Writer(TIMESTAMP_FILENAME);
 
         // todo: arreglar tema de parámetros
         ArgumentParser parser = new ArgumentParser();
@@ -36,6 +41,8 @@ public class Client {
 
         HazelcastInstance hzClient = HazelcastClient.newHazelcastClient(config);
 
+        logToWriter(timestamp, "Inicio de la lectura del archivo");
+
         // Load airports
         IList<Airport> airports = hzClient.getList("airports");
 
@@ -48,9 +55,16 @@ public class Client {
         csvLoader.loadAirports(airports, arguments.getInPath() + AIRPORTS_CSV);
         csvLoader.loadMovements(movements, arguments.getInPath() + MOVEMENTS_CSV);
 
+        logToWriter(timestamp, "Fin la lectura del archivo");
+
         // todo: switch entre todas las queries
         Query query = query(arguments.getQueryNumber(), hzClient, airports, movements);
+
+        logToWriter(timestamp, "Inicio del trabajo map/reduce");
+
         query.run();
+
+        logToWriter(timestamp, "Fin del trabajo map/reduce");
 
         airports.destroy();
         movements.destroy();
@@ -69,5 +83,10 @@ public class Client {
         }
 
         return query;
+    }
+
+    private static void logToWriter(final Writer writer, final String string) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss:S");
+        writer.writeString(LocalDateTime.now().format(formatter) + " INFO " + string + "\n");
     }
 }
