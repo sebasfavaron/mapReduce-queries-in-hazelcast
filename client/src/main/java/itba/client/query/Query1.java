@@ -28,11 +28,11 @@ public class Query1 implements Query {
     private IList<Movement> movements;
     private Writer writer;
 
-    public Query1(final HazelcastInstance hazelcastInstance, final IList<Airport> airports, final IList<Movement> movements) {
+    public Query1(final HazelcastInstance hazelcastInstance, final IList<Airport> airports, final IList<Movement> movements, final String outPath) {
         this.hazelcastInstance = hazelcastInstance;
         this.airports = airports;
         this.movements = movements;
-        this.writer = new Writer("query1.csv");
+        this.writer = new Writer(outPath + "query1.csv");
     }
 
     @Override

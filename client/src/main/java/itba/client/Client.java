@@ -85,7 +85,7 @@ public class Client {
         // Nunca va a entrar al caso default ni va a ser null porque viene desde los .sh, no desde el usuario
         switch (queryNumber) {
             case 1:
-                query = new Query1(hazelcastInstance, airports, movements);
+                query = new Query1(hazelcastInstance, airports, movements, clientArguments.getOutPath());
                 break;
 
             case 2:

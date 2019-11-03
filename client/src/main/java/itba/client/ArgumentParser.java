@@ -8,7 +8,7 @@ public class ArgumentParser {
         ClientArguments clientArguments = new ClientArguments();
         for (String arg : args) {
             if (arg.startsWith(DqueryNumber)) {
-                clientArguments.setQueryNumber(Integer.valueOf(getArgumentValue(arg, DqueryNumber)));
+                clientArguments.setQueryNumber(Integer.parseInt(getArgumentValue(arg, DqueryNumber)));
             } else if (arg.startsWith(Daddresses)) {
                 String val = getArgumentValue(arg, Daddresses);
                 String[] addresses = val.split(";");
