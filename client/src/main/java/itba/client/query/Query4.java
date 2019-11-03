@@ -7,7 +7,6 @@ import com.hazelcast.mapreduce.Job;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
 import itba.client.Writer;
-import itba.model.Airport;
 import itba.model.Movement;
 import itba.model.query4.DestinyAirportQuantityCombiner;
 import itba.model.query4.DestinyAirportQuantityMapper;
@@ -22,16 +21,14 @@ import java.util.stream.Collectors;
 public class Query4 implements Query {
 
     private HazelcastInstance hazelcastInstance;
-    private IList<Airport> airports;
     private IList<Movement> movements;
     private String destinyOACI;
     private int n;
     private Writer writer;
 
-    public Query4(final HazelcastInstance hazelcastInstance, final IList<Airport> airports,
-                  final IList<Movement> movements, final String destinyOACI, final int n, final String outPath) {
+    public Query4(final HazelcastInstance hazelcastInstance, final IList<Movement> movements, final String destinyOACI,
+                  final int n, final String outPath) {
         this.hazelcastInstance = hazelcastInstance;
-        this.airports = airports;
         this.movements = movements;
         this.destinyOACI = destinyOACI;
         this.n = n;
