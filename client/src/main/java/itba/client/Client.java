@@ -85,8 +85,13 @@ public class Client {
                 query = new Query1(hazelcastInstance, airports, movements);
                 break;
 
+            case 2:
+                query = new Query2(hazelcastInstance, airports, movements, 5);
+                break;
+
             case 4:
                 query = new Query4(hazelcastInstance, airports, movements, clientArguments.getOACI(), clientArguments.getN());
+                break;
         }
 
         return query;
