@@ -27,14 +27,12 @@ public class Query2 implements Query {
     private static final Logger LOGGER = LoggerFactory.getLogger(Query.class);
 
     private HazelcastInstance hazelcastInstance;
-    private IList<Airport> airports;
     private IList<Movement> movements;
     private Integer n;
     private Writer writer;
 
-    public Query2(final HazelcastInstance hazelcastInstance, final IList<Airport> airports, final IList<Movement> movements, final Integer n, final String outPath) {
+    public Query2(final HazelcastInstance hazelcastInstance, final IList<Movement> movements, final Integer n, final String outPath) {
         this.hazelcastInstance = hazelcastInstance;
-        this.airports = airports;
         this.movements = movements;
         this.n = n;
         this.writer = new Writer(outPath + "query2.csv");

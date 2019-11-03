@@ -5,10 +5,7 @@ import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IList;
-import itba.client.query.Query;
-import itba.client.query.Query1;
-import itba.client.query.Query2;
-import itba.client.query.Query4;
+import itba.client.query.*;
 import itba.model.Airport;
 import itba.model.HazelcastConfig;
 import itba.model.Movement;
@@ -87,7 +84,11 @@ public class Client {
                 break;
 
             case 2:
-                query = new Query2(hazelcastInstance, airports, movements, clientArguments.getN(), clientArguments.getOutPath());
+                query = new Query2(hazelcastInstance, movements, 5, clientArguments.getOutPath());
+                break;
+
+            case 3:
+                query = new Query3(hazelcastInstance, movements, clientArguments.getOutPath());
                 break;
 
             case 4:
