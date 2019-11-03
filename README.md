@@ -7,7 +7,7 @@ chmod +x master-script.sh
 ```
 Compiles the project and automatically opens two terminals
 * Terminal 1: server running
-* **Terminal 2: Execute the desire query, the working directory is already set**
+* **Terminal 2: Execute the desired query, the working directory is already set (see 'Running queries' below)**
 
 
 ### Unix based (the long way)
@@ -34,6 +34,8 @@ cd mapReduce-client-1.0-SNAPSHOT
 chmod +x query1.sh query2.sh query3.sh query4.sh
 ```
 
+
+### Running queries
 ##### In terminal 2: Query1
 ```
 ./query1.sh -Daddresses=<IP>:<port> -DinPath=<in path> -DoutPath=<out path>
