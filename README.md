@@ -26,7 +26,7 @@ chmod +x run-server.sh
 ./run-server.sh [-Dport=<port number>]
 ```
 
-#### Terminal 2: run the desired client
+#### Terminal 2: run the desired query
 ```
 cd <repository-root>/client/target
 tar xzf mapReduce-client-1.0-SNAPSHOT-bin.tar.gz
