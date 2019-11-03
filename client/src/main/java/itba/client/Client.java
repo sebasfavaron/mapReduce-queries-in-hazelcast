@@ -3,7 +3,6 @@ package itba.client;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
-import com.hazelcast.config.GroupConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IList;
 import itba.client.query.Query;
@@ -92,7 +91,7 @@ public class Client {
                 break;
 
             case 4:
-                query = new Query4(hazelcastInstance, airports, movements, clientArguments.getOACI(), clientArguments.getN(), clientArguments.getOutPath());
+                query = new Query4(hazelcastInstance, movements, clientArguments.getOACI(), clientArguments.getN(), clientArguments.getOutPath());
                 break;
         }
 
