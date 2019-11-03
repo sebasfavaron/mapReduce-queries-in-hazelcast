@@ -84,7 +84,7 @@ public class Client {
                 break;
 
             case 2:
-                query = new Query2(hazelcastInstance, movements, 5, clientArguments.getOutPath());
+                query = new Query2(hazelcastInstance, movements, clientArguments.getN(), clientArguments.getOutPath());
                 break;
 
             case 3:

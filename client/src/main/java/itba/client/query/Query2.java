@@ -79,6 +79,8 @@ public class Query2 implements Query {
                 .limit(this.n)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
+        writer.writeString("Aerolínea;Porcentaje\n");
+
         topAirlines.forEach((key, value) -> {
             topFlights.addAndGet(value);
             double percentage = (double) value / totalCabotageFlights;

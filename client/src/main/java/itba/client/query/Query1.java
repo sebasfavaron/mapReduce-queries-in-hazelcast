@@ -52,8 +52,7 @@ public class Query1 implements Query {
         Map<String, Integer> oaciMap = completableFuture.get();
         List<AirportWithResult> sortedAirportWithResultList = sortAndFilterResult(oaciMap);
 
-        sortedAirportWithResultList.forEach(airportWithResult -> writer.writeString(airportWithResult.airport.getOACI()
-                + ";" + airportWithResult.airport.getDenomination() + ";" + airportWithResult.result + "\n"));
+        printResults(sortedAirportWithResultList);
     }
 
     private List<AirportWithResult> sortAndFilterResult(final Map<String, Integer> oaciMap) {
@@ -75,6 +74,13 @@ public class Query1 implements Query {
                 oaciMap.get(airport.getOACI()) == null ? 0 : oaciMap.get(airport.getOACI()))));
 
         return airportWithResultList;
+    }
+
+    private void printResults(List<AirportWithResult> sortedAirportWithResultList){
+        writer.writeString("OACI;Denominación;Movimientos\n");
+
+        sortedAirportWithResultList.forEach(airportWithResult -> writer.writeString(airportWithResult.airport.getOACI()
+                + ";" + airportWithResult.airport.getDenomination() + ";" + airportWithResult.result + "\n"));
     }
 
     private static class AirportWithResult implements Comparable<AirportWithResult> {

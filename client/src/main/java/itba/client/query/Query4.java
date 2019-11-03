@@ -53,8 +53,7 @@ public class Query4 implements Query {
 
         List<DestinyAirport> destinyAirports = sortAndFilterResult(destinyAirportQuantityMap);
 
-        destinyAirports.forEach(destinyAirport -> writer.writeString(destinyAirport.oaci + ";"
-                + destinyAirport.quantity + "\n"));
+        printResults(destinyAirports);
     }
 
     private List<DestinyAirport> sortAndFilterResult(final Map<String, Integer> destinyAirportQuantityMap) {
@@ -65,6 +64,13 @@ public class Query4 implements Query {
         ret.sort(DestinyAirport::compareTo);
 
         return ret.stream().limit(n).collect(Collectors.toList());
+    }
+
+    private void printResults(List<DestinyAirport> destinyAirports){
+        writer.writeString("OACI;Despegues\n");
+
+        destinyAirports.forEach(destinyAirport -> writer.writeString(destinyAirport.oaci + ";"
+                + destinyAirport.quantity + "\n"));
     }
 
     private static class DestinyAirport implements Comparable<DestinyAirport> {
