@@ -32,12 +32,12 @@ public class Query2 implements Query {
     private Integer n;
     private Writer writer;
 
-    public Query2(final HazelcastInstance hazelcastInstance, final IList<Airport> airports, final IList<Movement> movements, final Integer n) {
+    public Query2(final HazelcastInstance hazelcastInstance, final IList<Airport> airports, final IList<Movement> movements, final Integer n, final String outPath) {
         this.hazelcastInstance = hazelcastInstance;
         this.airports = airports;
         this.movements = movements;
         this.n = n;
-        this.writer = new Writer("query2.csv");
+        this.writer = new Writer(outPath + "query2.csv");
     }
 
     @Override

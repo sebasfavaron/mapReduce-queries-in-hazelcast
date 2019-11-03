@@ -29,13 +29,13 @@ public class Query4 implements Query {
     private Writer writer;
 
     public Query4(final HazelcastInstance hazelcastInstance, final IList<Airport> airports,
-                  final IList<Movement> movements, final String destinyOACI, final int n) {
+                  final IList<Movement> movements, final String destinyOACI, final int n, final String outPath) {
         this.hazelcastInstance = hazelcastInstance;
         this.airports = airports;
         this.movements = movements;
         this.destinyOACI = destinyOACI;
         this.n = n;
-        this.writer = new Writer("query4.csv");
+        this.writer = new Writer(outPath + "query4.csv");
     }
 
     @Override

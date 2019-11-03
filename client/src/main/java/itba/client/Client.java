@@ -89,11 +89,11 @@ public class Client {
                 break;
 
             case 2:
-                query = new Query2(hazelcastInstance, airports, movements, 5);
+                query = new Query2(hazelcastInstance, airports, movements, 5, clientArguments.getOutPath());
                 break;
 
             case 4:
-                query = new Query4(hazelcastInstance, airports, movements, clientArguments.getOACI(), clientArguments.getN());
+                query = new Query4(hazelcastInstance, airports, movements, clientArguments.getOACI(), clientArguments.getN(), clientArguments.getOutPath());
                 break;
         }
 
