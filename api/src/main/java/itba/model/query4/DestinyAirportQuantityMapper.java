@@ -7,16 +7,16 @@ import itba.model.Movement;
 
 public class DestinyAirportQuantityMapper implements Mapper<String, Movement, String, Integer> {
 
-    private String destinyOACI;
+    private String originOACI;
 
-    public DestinyAirportQuantityMapper(final String destinyOACI) {
-        this.destinyOACI = destinyOACI;
+    public DestinyAirportQuantityMapper(final String originOACI) {
+        this.originOACI = originOACI;
     }
 
     @Override
     public void map(final String s, final Movement movement, final Context<String, Integer> context) {
-        if (movement.getMoveType().equals(MoveType.LANDING) && movement.getOACIDestiny().equals(destinyOACI)) {
-            context.emit(movement.getOACIOrigin(), 1);
+        if (movement.getMoveType().equals(MoveType.TAKE_OF) && movement.getOACIOrigin().equals(originOACI)) {
+            context.emit(movement.getOACIDestiny(), 1);
         }
     }
 }

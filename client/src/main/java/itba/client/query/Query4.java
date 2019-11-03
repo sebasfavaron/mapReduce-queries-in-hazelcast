@@ -54,13 +54,13 @@ public class Query4 implements Query {
 
         Map<String, Integer> destinyAirportQuantityMap = completableFuture.get();
 
-        List<DestinyAirport> destinyAirports = sortAndFilterResult(destinyAirportQuantityMap, n);
+        List<DestinyAirport> destinyAirports = sortAndFilterResult(destinyAirportQuantityMap);
 
         destinyAirports.forEach(destinyAirport -> writer.writeString(destinyAirport.oaci + ";"
                 + destinyAirport.quantity + "\n"));
     }
 
-    private List<DestinyAirport> sortAndFilterResult(final Map<String, Integer> destinyAirportQuantityMap, final int n) {
+    private List<DestinyAirport> sortAndFilterResult(final Map<String, Integer> destinyAirportQuantityMap) {
         List<DestinyAirport> ret = new LinkedList<>();
 
         destinyAirportQuantityMap.forEach((k, v) -> ret.add(new DestinyAirport(k, v)));
