@@ -2,7 +2,9 @@ package itba.client;
 
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
+import com.hazelcast.client.config.ClientNetworkConfig;
 import com.hazelcast.config.GroupConfig;
+import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IList;
 import itba.client.query.Query;
@@ -35,8 +37,9 @@ public class Client {
         ClientArguments arguments = parser.parse(args);
 
         ClientConfig config = new ClientConfig();
-        arguments.getAddresses()
-                .forEach(address -> config.getNetworkConfig().addAddress(address.getHost() + ":" + address.getPort()));
+        ClientNetworkConfig networkConfig = config.getNetworkConfig();
+        arguments.getAddresses().forEach(address -> networkConfig.addAddress(address.getAddress()));
+        networkConfig.setSmartRouting(false);
         GroupConfig groupConfig = config.getGroupConfig();
         groupConfig.setName("dev");
         groupConfig.setPassword("dev-pass");

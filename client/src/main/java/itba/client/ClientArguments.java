@@ -20,25 +20,25 @@ public class ClientArguments {
     }
 
     public class Address {
-        private String host;
-        private Integer port;
+        private String address;
 
         public Address(String host, String port) {
             if (!host.matches("([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3})|localhost")) {
                 System.out.println("Host is not valid");
                 System.exit(-1);
             }
-            this.host = host;
+            try {
+                double i = Integer.parseInt(port);
+            } catch (NumberFormatException | NullPointerException nfe) {
+                System.out.println("Port is not valid");
+                System.exit(-1);
+            }
 
-            this.port = stringToInt(port, "Port is not valid");
+            this.address = host + ":" + port;
         }
 
-        public String getHost() {
-            return host;
-        }
-
-        public Integer getPort() {
-            return port;
+        public String getAddress() {
+            return address;
         }
     }
 

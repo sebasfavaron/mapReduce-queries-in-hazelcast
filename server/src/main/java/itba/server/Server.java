@@ -18,24 +18,13 @@ public class Server {
         // por eso no hay que inicializar nada más acá
         Config config = new Config();
         NetworkConfig network = config.getNetworkConfig();
-        network.setPort(5701);
-        network.setPortAutoIncrement(false);
+        network.setPort(5701).setPortCount(50);
+        network.setPortAutoIncrement(true);
         JoinConfig join = network.getJoin();
         join.getMulticastConfig().setEnabled(false);
-        join.getTcpIpConfig().addMember("localhost").setEnabled(true);
-
-        HazelcastInstance hzInstance = Hazelcast.newHazelcastInstance(config);
-
-//        //Map example in hz
-//        Map<Long, String> map = hzInstance.getMap("mapExample");
-//        IdGenerator idGenerator = hzInstance.getIdGenerator("newid");
-//        for (int i = 0; i < 10; i++) {
-//            map.put(idGenerator.newId(), "message" + i);
-//        }
-//
-//        //Load movements
-//        List<Movement> movements = hzInstance.getList("movements");
-//        CsvLoader csvLoader = new CsvLoader();
-//        csvLoader.loadMovement(movements, "movimientos.csv");
+        join.getTcpIpConfig()
+                .addMember("localhost")
+                .setEnabled(true);
+        HazelcastInstance hzServer = Hazelcast.newHazelcastInstance(config);
     }
 }

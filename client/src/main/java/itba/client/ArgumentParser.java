@@ -14,7 +14,7 @@ public class ArgumentParser {
                 String[] addresses = val.split(";");
 
                 Arrays.stream(addresses).forEach(address -> {
-                    String[] aux = val.split(":");
+                    String[] aux = address.split(":");
                     clientArguments.addAddress(aux[0], aux[1]);
                 });
             } else if (arg.startsWith(DinPath)) {
