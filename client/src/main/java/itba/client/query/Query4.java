@@ -7,7 +7,6 @@ import com.hazelcast.mapreduce.Job;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
 import itba.client.Writer;
-import itba.model.Airport;
 import itba.model.Movement;
 import itba.model.query4.DestinyAirportQuantityCombiner;
 import itba.model.query4.DestinyAirportQuantityMapper;
@@ -22,16 +21,14 @@ import java.util.stream.Collectors;
 public class Query4 implements Query {
 
     private HazelcastInstance hazelcastInstance;
-    private IList<Airport> airports;
     private IList<Movement> movements;
     private String destinyOACI;
     private int n;
     private Writer writer;
 
-    public Query4(final HazelcastInstance hazelcastInstance, final IList<Airport> airports,
-                  final IList<Movement> movements, final String destinyOACI, final int n, final String outPath) {
+    public Query4(final HazelcastInstance hazelcastInstance, final IList<Movement> movements, final String destinyOACI,
+                  final int n, final String outPath) {
         this.hazelcastInstance = hazelcastInstance;
-        this.airports = airports;
         this.movements = movements;
         this.destinyOACI = destinyOACI;
         this.n = n;
@@ -54,13 +51,13 @@ public class Query4 implements Query {
 
         Map<String, Integer> destinyAirportQuantityMap = completableFuture.get();
 
-        List<DestinyAirport> destinyAirports = sortAndFilterResult(destinyAirportQuantityMap, n);
+        List<DestinyAirport> destinyAirports = sortAndFilterResult(destinyAirportQuantityMap);
 
         destinyAirports.forEach(destinyAirport -> writer.writeString(destinyAirport.oaci + ";"
                 + destinyAirport.quantity + "\n"));
     }
 
-    private List<DestinyAirport> sortAndFilterResult(final Map<String, Integer> destinyAirportQuantityMap, final int n) {
+    private List<DestinyAirport> sortAndFilterResult(final Map<String, Integer> destinyAirportQuantityMap) {
         List<DestinyAirport> ret = new LinkedList<>();
 
         destinyAirportQuantityMap.forEach((k, v) -> ret.add(new DestinyAirport(k, v)));
