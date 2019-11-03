@@ -16,7 +16,6 @@ public class CsvLoader {
 
     public void loadMovements(final IList<Movement> movements, final String filePath) {
         File csvFile = new File(filePath);
-        System.out.println(csvFile.getAbsolutePath());
 
         if (csvFile.isFile()) {
             String row;
@@ -52,7 +51,6 @@ public class CsvLoader {
 
     public void loadAirports(final IList<Airport> airports, final String filePath) {
         File csvFile = new File(filePath);
-        System.out.println(csvFile.getAbsolutePath());
 
         if (csvFile.isFile()) {
             String row;

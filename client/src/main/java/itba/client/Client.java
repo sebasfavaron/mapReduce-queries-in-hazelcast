@@ -3,8 +3,6 @@ package itba.client;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
-import com.hazelcast.config.GroupConfig;
-import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IList;
 import itba.client.query.Query;
@@ -12,6 +10,7 @@ import itba.client.query.Query1;
 import itba.client.query.Query2;
 import itba.client.query.Query4;
 import itba.model.Airport;
+import itba.model.HazelcastConfig;
 import itba.model.Movement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,11 +27,11 @@ public class Client {
     private static String TIMESTAMP_FILENAME = "timestamp.txt";
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        LOGGER.info("mapReduce Client Starting ...");
+
+        LOGGER.info("Inicializando consulta ...");
 
         Writer timestamp = new Writer(TIMESTAMP_FILENAME);
 
-        // todo: arreglar tema de parámetros
         ArgumentParser parser = new ArgumentParser();
         ClientArguments arguments = parser.parse(args);
 
@@ -40,12 +39,11 @@ public class Client {
         ClientNetworkConfig networkConfig = config.getNetworkConfig();
         arguments.getAddresses().forEach(address -> networkConfig.addAddress(address.getAddress()));
         networkConfig.setSmartRouting(false);
-        GroupConfig groupConfig = config.getGroupConfig();
-        groupConfig.setName("dev");
-        groupConfig.setPassword("dev-pass");
+        config.getGroupConfig().setName(HazelcastConfig.CLUSTER_NAME);
 
         HazelcastInstance hzClient = HazelcastClient.newHazelcastClient(config);
 
+        LOGGER.info("Inicio de la lectura del archivo");
         logToWriter(timestamp, "Inicio de la lectura del archivo");
 
         // Load airports
@@ -54,22 +52,22 @@ public class Client {
         //Load movements
         IList<Movement> movements = hzClient.getList("movements");
 
-        // todo: checkear que exista el archivo (como? hay IOException adentro)
-        // todo: arreglar tema de parámetros (agregar el path completo al principio de aeropuertos.csv)
         CsvLoader csvLoader = new CsvLoader();
         csvLoader.loadAirports(airports, arguments.getInPath() + AIRPORTS_CSV);
         csvLoader.loadMovements(movements, arguments.getInPath() + MOVEMENTS_CSV);
 
         logToWriter(timestamp, "Fin la lectura del archivo");
+        LOGGER.info("Fin la lectura del archivo");
 
-        // todo: switch entre todas las queries
         Query query = query(arguments.getQueryNumber(), hzClient, airports, movements, arguments);
 
+        LOGGER.info("Inicio del trabajo map/reduce");
         logToWriter(timestamp, "Inicio del trabajo map/reduce");
 
         query.run();
 
         logToWriter(timestamp, "Fin del trabajo map/reduce");
+        LOGGER.info("Fin del trabajo map/reduce");
 
         airports.destroy();
         movements.destroy();
