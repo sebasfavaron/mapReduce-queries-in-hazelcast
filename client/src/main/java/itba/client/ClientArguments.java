@@ -5,6 +5,7 @@ import java.util.List;
 
 public class ClientArguments {
 
+    private int queryNumber;
     private List<Address> addresses;
     private String inPath, outPath, OACI;
     private Integer n, min;
@@ -53,6 +54,14 @@ public class ClientArguments {
             System.exit(-1);
         }
         return null;
+    }
+
+    public int getQueryNumber() {
+        return queryNumber;
+    }
+
+    public void setQueryNumber(final int queryNumber) {
+        this.queryNumber = queryNumber;
     }
 
     public String getInPath() {

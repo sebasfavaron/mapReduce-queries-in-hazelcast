@@ -6,27 +6,33 @@ import com.hazelcast.core.IList;
 import com.hazelcast.mapreduce.Job;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
+import itba.client.Writer;
 import itba.model.Airport;
 import itba.model.Movement;
 import itba.model.query1.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 public class Query1 implements Query {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Query.class);
 
     private HazelcastInstance hazelcastInstance;
     private IList<Airport> airports;
     private IList<Movement> movements;
-    private Logger logger;
+    private Writer writer;
 
     public Query1(final HazelcastInstance hazelcastInstance, final IList<Airport> airports, final IList<Movement> movements) {
         this.hazelcastInstance = hazelcastInstance;
         this.airports = airports;
         this.movements = movements;
-        this.logger = LoggerFactory.getLogger(Query.class);
+        this.writer = new Writer("query1.csv");
     }
 
     @Override
@@ -44,10 +50,46 @@ public class Query1 implements Query {
                 .submit();
 
         Map<String, Integer> oaciMap = completableFuture.get();
+        List<AirportWithResult> sortedAirportWithResultList = sortAndFilterResult(oaciMap);
 
-        // todo: Ordenar y guardar el resultado de oaciMap en el archivo de salida.
+        sortedAirportWithResultList.forEach(airportWithResult -> writer.writeString(airportWithResult.airport.getOACI()
+                + ";" + airportWithResult.airport.getDenomination() + ";" + airportWithResult.result + "\n"));
+    }
 
-        System.out.println();
+    private List<AirportWithResult> sortAndFilterResult(final Map<String, Integer> oaciMap) {
 
+        List<AirportWithResult> airportWithResultList = convertFromOACIMapToAirportWithResultList(oaciMap);
+
+        airportWithResultList.sort((airportWithResult, t1) -> {
+            if (airportWithResult.result == t1.result) {
+                return airportWithResult.airport.getOACI().compareTo(t1.airport.getOACI());
+            }
+
+            return t1.result - airportWithResult.result;
+        });
+
+        airportWithResultList = airportWithResultList.stream().filter(airportWithResult -> airportWithResult.result != 0)
+                .collect(Collectors.toList());
+
+        return airportWithResultList;
+    }
+
+    private List<AirportWithResult> convertFromOACIMapToAirportWithResultList(final Map<String, Integer> oaciMap) {
+        List<AirportWithResult> airportWithResultList = new LinkedList<>();
+
+        airports.forEach(airport -> airportWithResultList.add(new AirportWithResult(airport,
+                oaciMap.get(airport.getOACI()) == null ? 0 : oaciMap.get(airport.getOACI()))));
+
+        return airportWithResultList;
+    }
+
+    private static class AirportWithResult {
+        private Airport airport;
+        private int result;
+
+        AirportWithResult(final Airport airport, final int result) {
+            this.airport = airport;
+            this.result = result;
+        }
     }
 }

@@ -4,10 +4,12 @@ import java.util.Arrays;
 
 public class ArgumentParser {
     public ClientArguments parse(final String[] args) {
-        String Daddresses = "-Daddresses=", DinPath = "-DinPath=", DoutPath = "-DoutPath=", Doaci = "-Doaci=", Dn = "-Dn=", Dmin = "-Dmin=";
+        String DqueryNumber = "-DqueryNumber=", Daddresses = "-Daddresses=", DinPath = "-DinPath=", DoutPath = "-DoutPath=", Doaci = "-Doaci=", Dn = "-Dn=", Dmin = "-Dmin=";
         ClientArguments clientArguments = new ClientArguments();
         for (String arg : args) {
-            if (arg.startsWith(Daddresses)) {
+            if (arg.startsWith(DqueryNumber)) {
+                clientArguments.setQueryNumber(Integer.valueOf(getArgumentValue(arg, DqueryNumber)));
+            } else if (arg.startsWith(Daddresses)) {
                 String val = getArgumentValue(arg, Daddresses);
                 String[] addresses = val.split(";");
 
