@@ -7,6 +7,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IList;
 import itba.client.query.Query;
 import itba.client.query.Query1;
+import itba.client.query.Query2;
 import itba.model.Airport;
 import itba.model.Movement;
 import org.slf4j.Logger;
@@ -80,6 +81,10 @@ public class Client {
         switch (queryNumber) {
             case 1:
                 query = new Query1(hazelcastInstance, airports, movements);
+                break;
+            case 2:
+                query = new Query2(hazelcastInstance, airports, movements, 5);
+                break;
         }
 
         return query;

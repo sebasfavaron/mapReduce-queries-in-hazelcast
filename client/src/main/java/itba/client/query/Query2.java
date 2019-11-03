@@ -1,68 +1,99 @@
 package itba.client.query;
 
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.ICompletableFuture;
 import com.hazelcast.core.IList;
+import com.hazelcast.mapreduce.Job;
+import com.hazelcast.mapreduce.JobTracker;
+import com.hazelcast.mapreduce.KeyValueSource;
+import itba.client.Writer;
 import itba.model.Airport;
 import itba.model.Movement;
+import itba.model.query2.CabotageMovementsPerAirlineCombiner;
+import itba.model.query2.CabotageMovementsPerAirlineMapper;
+import itba.model.query2.CabotageMovementsPerAirlineReducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class Query2 implements Query{
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Query.class);
+
+    private HazelcastInstance hazelcastInstance;
     private IList<Airport> airports;
     private IList<Movement> movements;
     private Integer n;
-    private Logger logger;
+    private Writer writer;
 
-    public Query2(final IList<Airport> airports, final IList<Movement> movements, final Integer n) {
+    public Query2(final HazelcastInstance hazelcastInstance, final IList<Airport> airports, final IList<Movement> movements, final Integer n) {
+        this.hazelcastInstance = hazelcastInstance;
         this.airports = airports;
         this.movements = movements;
         this.n = n;
-        this.logger = LoggerFactory.getLogger(Query.class);
+        this.writer = new Writer("query2.csv");
     }
 
     @Override
     public void run() throws InterruptedException, ExecutionException {
-        HashMap<String, Integer> airlanes = new HashMap<>();
-        AtomicReference<Integer> totalCabotageFlights = new AtomicReference<>(0);
 
-        //Load airlanes and count of cabotage flights
-        movements.forEach(movement -> {
-            if (movement.getClassification().equals("Cabotaje")){
-                totalCabotageFlights.getAndSet(totalCabotageFlights.get() + 1);
+        JobTracker jobTracker = hazelcastInstance.getJobTracker("Query2");
 
-                if (airlanes.containsKey(movement.getAirline())){
-                    airlanes.put(movement.getAirline(), airlanes.get(movement.getAirline()) + 1);
-                } else {
-                    airlanes.put(movement.getAirline(), 1);
-                }
-            }
-        });
+        KeyValueSource<String, Movement> source = KeyValueSource.fromList(movements);
+        Job<String, Movement> job = jobTracker.newJob(source);
 
-        printResults(airlanes, totalCabotageFlights);
+        ICompletableFuture<Map<String, Integer>> completableFuture = job
+                .mapper(new CabotageMovementsPerAirlineMapper())
+                .combiner(new CabotageMovementsPerAirlineCombiner())
+                .reducer(new CabotageMovementsPerAirlineReducer())
+                .submit();
+
+        Map<String, Integer> cabotageMovementsPerAirline = completableFuture.get();
+
+        AtomicInteger totalCabotageFlights = getTotalCabotageFlights(cabotageMovementsPerAirline);
+
+        printResults(cabotageMovementsPerAirline, totalCabotageFlights.get());
     }
 
-    private void printResults(HashMap<String, Integer> airlanes, AtomicReference<Integer> totalCabotageFlights){
-        Double acumTotalPercentage = 0.0;
+    private AtomicInteger getTotalCabotageFlights(Map<String, Integer> cabotageMovementsPerAirline){
+        AtomicInteger totalCabotageFlights = new AtomicInteger();
 
-        for (Integer n = this.n; n > 0; n--){
-            String maxAirlanePercentage = Collections.max(airlanes.entrySet(), Map.Entry.comparingByValue()).getKey();
-            acumTotalPercentage += (double) (airlanes.get(maxAirlanePercentage) / totalCabotageFlights.get());
-            printLine(maxAirlanePercentage, (double) (airlanes.get(maxAirlanePercentage) / totalCabotageFlights.get()) * 100);
-            airlanes.remove(maxAirlanePercentage);
-        }
+        cabotageMovementsPerAirline.forEach((key, value) -> {
+            totalCabotageFlights.addAndGet(value);
+        });
 
-        if (acumTotalPercentage != 1){
-            printLine("Otros", (1 - acumTotalPercentage) * 100);
+        return totalCabotageFlights;
+    }
+
+    private void printResults(Map<String, Integer> airlanes, Integer totalCabotageFlights){
+        AtomicInteger topFlights = new AtomicInteger();
+
+        final Map<String, Integer> topAirlines = airlanes.entrySet()
+                .stream()
+                .filter(airline ->  !airline.getKey().equals("N/A") && !airline.getKey().equals(""))
+                .sorted(Comparator.comparing(Map.Entry<String, Integer>::getValue).reversed().thenComparing(Map.Entry::getKey))
+                .limit(this.n)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+
+        topAirlines.forEach((key, value) -> {
+            topFlights.addAndGet(value);
+            double percentage = (double) value / totalCabotageFlights;
+            printLine(key, percentage * 100);
+        });
+
+        if (topFlights.get() != totalCabotageFlights){
+            double percentage = (double) topFlights.get() / totalCabotageFlights;
+            printLine("Otros", (1 - percentage) * 100);
         }
     }
 
     private void printLine(String airlane, Double percentage){
-        System.out.println(airlane + ";" + percentage + "%");
+        writer.writeString(airlane + ";" + String.format("%.2f", percentage) + "%\n" );
     }
 }
