@@ -9,5 +9,5 @@
   <groupId>itba</groupId>
   <artifactId>mapReduce-api</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <name>mapReduce-api</name>
+  <name>tpe2-g10-api</name>
 </project>
