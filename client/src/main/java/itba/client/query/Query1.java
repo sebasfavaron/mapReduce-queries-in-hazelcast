@@ -60,13 +60,7 @@ public class Query1 implements Query {
 
         List<AirportWithResult> airportWithResultList = convertFromOACIMapToAirportWithResultList(oaciMap);
 
-        airportWithResultList.sort((airportWithResult, t1) -> {
-            if (airportWithResult.result == t1.result) {
-                return airportWithResult.airport.getOACI().compareTo(t1.airport.getOACI());
-            }
-
-            return t1.result - airportWithResult.result;
-        });
+        airportWithResultList.sort(AirportWithResult::compareTo);
 
         airportWithResultList = airportWithResultList.stream().filter(airportWithResult -> airportWithResult.result != 0)
                 .collect(Collectors.toList());
@@ -83,13 +77,22 @@ public class Query1 implements Query {
         return airportWithResultList;
     }
 
-    private static class AirportWithResult {
+    private static class AirportWithResult implements Comparable<AirportWithResult> {
         private Airport airport;
         private int result;
 
         AirportWithResult(final Airport airport, final int result) {
             this.airport = airport;
             this.result = result;
+        }
+
+        @Override
+        public int compareTo(final AirportWithResult airportWithResult) {
+            if (result == airportWithResult.result) {
+                return airport.getOACI().compareTo(airportWithResult.airport.getOACI());
+            }
+
+            return airportWithResult.result - result;
         }
     }
 }

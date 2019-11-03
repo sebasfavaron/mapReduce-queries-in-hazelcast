@@ -2,6 +2,7 @@ package itba.model.query1;
 
 import com.hazelcast.mapreduce.Context;
 import com.hazelcast.mapreduce.Mapper;
+import itba.model.MoveType;
 import itba.model.Movement;
 
 public class MovementsPerAirportMapper implements Mapper<String, Movement, String, Integer> {
@@ -11,7 +12,7 @@ public class MovementsPerAirportMapper implements Mapper<String, Movement, Strin
 
         // Asumimos datos bien formados
         String OACI;
-        if(movement.getMoveType().equals("Aterrizaje")) {
+        if(movement.getMoveType().equals(MoveType.LANDING)) {
             OACI = movement.getOACIDestiny();
         } else {
             OACI = movement.getOACIOrigin();
