@@ -7,6 +7,8 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IList;
 import itba.client.query.Query;
 import itba.client.query.Query1;
+import itba.client.query.Query2;
+import itba.client.query.Query4;
 import itba.model.Airport;
 import itba.model.Movement;
 import org.slf4j.Logger;
@@ -58,7 +60,7 @@ public class Client {
         logToWriter(timestamp, "Fin la lectura del archivo");
 
         // todo: switch entre todas las queries
-        Query query = query(arguments.getQueryNumber(), hzClient, airports, movements);
+        Query query = query(arguments.getQueryNumber(), hzClient, airports, movements, arguments);
 
         logToWriter(timestamp, "Inicio del trabajo map/reduce");
 
@@ -72,7 +74,8 @@ public class Client {
     }
 
     private static Query query(final int queryNumber, final HazelcastInstance hazelcastInstance,
-                               final IList<Airport> airports, final IList<Movement> movements) {
+                               final IList<Airport> airports, final IList<Movement> movements,
+                               final ClientArguments clientArguments) {
 
         Query query = null;
 
@@ -80,6 +83,10 @@ public class Client {
         switch (queryNumber) {
             case 1:
                 query = new Query1(hazelcastInstance, airports, movements);
+                break;
+
+            case 4:
+                query = new Query4(hazelcastInstance, airports, movements, clientArguments.getOACI(), clientArguments.getN());
         }
 
         return query;
