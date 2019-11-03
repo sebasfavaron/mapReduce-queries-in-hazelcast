@@ -9,7 +9,7 @@
   <groupId>itba</groupId>
   <artifactId>mapReduce-client</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <name>mapReduce-client</name>
+  <name>tpe2-g10-client</name>
   <dependencies>
     <dependency>
       <groupId>itba</groupId>
