@@ -44,9 +44,9 @@ public class Query1 implements Query {
         Job<String, Movement> job = jobTracker.newJob(source);
 
         ICompletableFuture<Map<String, Integer>> completableFuture = job
-                .mapper(new MovementsPerAirportMapper())
-                .combiner(new MovementsPerAirportCombiner())
-                .reducer(new MovementsPerAirportReducer())
+                .mapper(new g10MovementsPerAirportMapper())
+                .combiner(new g10MovementsPerAirportCombiner())
+                .reducer(new g10MovementsPerAirportReducer())
                 .submit();
 
         Map<String, Integer> oaciMap = completableFuture.get();

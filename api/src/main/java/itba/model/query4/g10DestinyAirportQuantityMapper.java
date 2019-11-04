@@ -5,11 +5,11 @@ import com.hazelcast.mapreduce.Mapper;
 import itba.model.MoveType;
 import itba.model.Movement;
 
-public class DestinyAirportQuantityMapper implements Mapper<String, Movement, String, Integer> {
+public class g10DestinyAirportQuantityMapper implements Mapper<String, Movement, String, Integer> {
 
     private String originOACI;
 
-    public DestinyAirportQuantityMapper(final String originOACI) {
+    public g10DestinyAirportQuantityMapper(final String originOACI) {
         this.originOACI = originOACI;
     }
 

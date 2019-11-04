@@ -7,11 +7,10 @@ import com.hazelcast.mapreduce.Job;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
 import itba.client.Writer;
-import itba.model.Airport;
 import itba.model.Movement;
-import itba.model.query2.CabotageMovementsPerAirlineCombiner;
-import itba.model.query2.CabotageMovementsPerAirlineMapper;
-import itba.model.query2.CabotageMovementsPerAirlineReducer;
+import itba.model.query2.g10CabotageMovementsPerAirlineCombiner;
+import itba.model.query2.g10CabotageMovementsPerAirlineMapper;
+import itba.model.query2.g10CabotageMovementsPerAirlineReducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,9 +46,9 @@ public class Query2 implements Query {
         Job<String, Movement> job = jobTracker.newJob(source);
 
         ICompletableFuture<Map<String, Integer>> completableFuture = job
-                .mapper(new CabotageMovementsPerAirlineMapper())
-                .combiner(new CabotageMovementsPerAirlineCombiner())
-                .reducer(new CabotageMovementsPerAirlineReducer())
+                .mapper(new g10CabotageMovementsPerAirlineMapper())
+                .combiner(new g10CabotageMovementsPerAirlineCombiner())
+                .reducer(new g10CabotageMovementsPerAirlineReducer())
                 .submit();
 
         Map<String, Integer> cabotageMovementsPerAirline = completableFuture.get();

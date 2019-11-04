@@ -5,7 +5,7 @@ import com.hazelcast.mapreduce.Mapper;
 import itba.model.MoveType;
 import itba.model.Movement;
 
-public class MovementsPerAirportMapper implements Mapper<String, Movement, String, Integer> {
+public class g10MovementsPerAirportMapper implements Mapper<String, Movement, String, Integer> {
 
     @Override
     public void map(String s, Movement movement, Context<String, Integer> context) {

@@ -3,7 +3,7 @@ package itba.model.query4;
 import com.hazelcast.mapreduce.Reducer;
 import com.hazelcast.mapreduce.ReducerFactory;
 
-public class DestinyAirportQuantityReducer implements ReducerFactory<String, Integer, Integer> {
+public class g10DestinyAirportQuantityReducer implements ReducerFactory<String, Integer, Integer> {
 
     @Override
     public Reducer<Integer, Integer> newReducer(final String s) {

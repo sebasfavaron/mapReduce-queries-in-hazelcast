@@ -8,13 +8,12 @@ import com.hazelcast.mapreduce.Job;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
 import itba.client.Writer;
-import itba.model.Airport;
 import itba.model.Movement;
-import itba.model.query1.MovementsPerAirportCombiner;
-import itba.model.query1.MovementsPerAirportMapper;
-import itba.model.query1.MovementsPerAirportReducer;
-import itba.model.query3.ThounsandMovementsPerAirportMapper;
-import itba.model.query3.ThounsandMovementsPerAirportReducer;
+import itba.model.query1.g10MovementsPerAirportCombiner;
+import itba.model.query1.g10MovementsPerAirportMapper;
+import itba.model.query1.g10MovementsPerAirportReducer;
+import itba.model.query3.g10ThounsandMovementsPerAirportMapper;
+import itba.model.query3.g10ThounsandMovementsPerAirportReducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,9 +45,9 @@ public class Query3 implements Query {
         Job<String, Movement> job = jobTracker.newJob(source);
 
         ICompletableFuture<Map<String, Integer>> completableFuture = job
-                .mapper(new MovementsPerAirportMapper())
-                .combiner(new MovementsPerAirportCombiner())
-                .reducer(new MovementsPerAirportReducer())
+                .mapper(new g10MovementsPerAirportMapper())
+                .combiner(new g10MovementsPerAirportCombiner())
+                .reducer(new g10MovementsPerAirportReducer())
                 .submit();
 
         Map<String, Integer> oaciMovementsMap = completableFuture.get();
@@ -60,8 +59,8 @@ public class Query3 implements Query {
         Job<String, Integer> newJob = jobTracker.newJob(newSource);
 
         ICompletableFuture<Map<Integer, List<String>>> newCompletableFuture = newJob
-                .mapper(new ThounsandMovementsPerAirportMapper())
-                .reducer(new ThounsandMovementsPerAirportReducer())
+                .mapper(new g10ThounsandMovementsPerAirportMapper())
+                .reducer(new g10ThounsandMovementsPerAirportReducer())
                 .submit();
 
         Map<Integer, List<String>> thousandMovementsPerAirport = newCompletableFuture.get();

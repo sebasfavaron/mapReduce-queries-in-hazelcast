@@ -6,7 +6,7 @@ import com.hazelcast.mapreduce.ReducerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ThounsandMovementsPerAirportReducer implements ReducerFactory<Integer, String, List<String>> {
+public class g10ThounsandMovementsPerAirportReducer implements ReducerFactory<Integer, String, List<String>> {
     @Override
     public Reducer<String, List<String>> newReducer(Integer integer) {
 

@@ -8,9 +8,9 @@ import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
 import itba.client.Writer;
 import itba.model.Movement;
-import itba.model.query4.DestinyAirportQuantityCombiner;
-import itba.model.query4.DestinyAirportQuantityMapper;
-import itba.model.query4.DestinyAirportQuantityReducer;
+import itba.model.query4.g10DestinyAirportQuantityCombiner;
+import itba.model.query4.g10DestinyAirportQuantityMapper;
+import itba.model.query4.g10DestinyAirportQuantityReducer;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -44,9 +44,9 @@ public class Query4 implements Query {
         Job<String, Movement> job = jobTracker.newJob(source);
 
         ICompletableFuture<Map<String, Integer>> completableFuture = job
-                .mapper(new DestinyAirportQuantityMapper(destinyOACI))
-                .combiner(new DestinyAirportQuantityCombiner())
-                .reducer(new DestinyAirportQuantityReducer())
+                .mapper(new g10DestinyAirportQuantityMapper(destinyOACI))
+                .combiner(new g10DestinyAirportQuantityCombiner())
+                .reducer(new g10DestinyAirportQuantityReducer())
                 .submit();
 
         Map<String, Integer> destinyAirportQuantityMap = completableFuture.get();

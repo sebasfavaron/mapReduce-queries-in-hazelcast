@@ -3,7 +3,7 @@ package itba.model.query1;
 import com.hazelcast.mapreduce.Combiner;
 import com.hazelcast.mapreduce.CombinerFactory;
 
-public class MovementsPerAirportCombiner implements CombinerFactory<String, Integer, Integer> {
+public class g10MovementsPerAirportCombiner implements CombinerFactory<String, Integer, Integer> {
 
     @Override
     public Combiner<Integer, Integer> newCombiner(final String s) {

@@ -3,7 +3,7 @@ package itba.model.query3;
 import com.hazelcast.mapreduce.Context;
 import com.hazelcast.mapreduce.Mapper;
 
-public class ThounsandMovementsPerAirportMapper implements Mapper<String, Integer, Integer, String> {
+public class g10ThounsandMovementsPerAirportMapper implements Mapper<String, Integer, Integer, String> {
 
     @Override
     public void map(String oaci, Integer movements, Context<Integer,String> context) {
