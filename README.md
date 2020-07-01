@@ -1,22 +1,22 @@
-# pod-tp2
+# Map-Reduce queries using airport data in a Hazelcast database
 
-### Debian based with x-terminal-emulator
+## Set-up
+### Debian based with x-terminal-emulator (bash)
 ```
 chmod +x master-script.sh
 ./master-script.sh
 ```
-Compiles the project and automatically opens two terminals
+This compiles the project and automatically opens two terminals:
 * Terminal 1: server running
 * **Terminal 2: Execute the desired query, the working directory is already set (see 'Running queries' below)**
 
 
 ### Unix based (the long way)
-
 #### On root folder
 ```
 mvn clean install
 ```
-
+Open two terminals:
 #### Terminal 1: run the server
 ```
 cd <repository-root>/server/target
@@ -25,7 +25,6 @@ cd mapReduce-server-1.0-SNAPSHOT
 chmod +x run-server.sh
 ./run-server.sh [-Dport=<port number>]
 ```
-
 #### Terminal 2: run the desired query
 ```
 cd <repository-root>/client/target
@@ -35,7 +34,8 @@ chmod +x query1.sh query2.sh query3.sh query4.sh
 ```
 
 
-### Running queries
+## Running queries
+### For more info on what the queries do, refer to the Instructions.pdf
 ##### In terminal 2: Query1
 ```
 ./query1.sh -Daddresses=<IP>:<port> -DinPath=<in path> -DoutPath=<out path>
